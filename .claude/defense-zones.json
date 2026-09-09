@@ -1,0 +1,15 @@
+{
+  "_comment": "잠정치 — ADR-004(FSD 폴더 구조 채택 범위) 확정 후 실제 경로로 교체할 것. Concept.md 6.2/6.3/6.5/6.6의 5개 방어 구역.",
+  "_matching": "prefix는 경로 앞부분과 그대로 비교하고, keyword는 양쪽에서 영문자·숫자만 남기고 소문자로 바꾼 뒤 포함 여부를 본다. 그래서 CallStateMachine.tsx / call-state-machine.ts / call_state_machine.ts 가 모두 같게 걸린다.",
+  "zones": [
+    { "prefix": "apps/web/", "keyword": "statemachine", "reason": "WebRTC 연결 상태 머신 (Build-Phase0-1.md M1-04)" },
+    { "prefix": "apps/web/", "keyword": "audioworklet", "reason": "AudioWorklet PCM 캡처·리샘플링 (Concept 6.5)" },
+    { "prefix": "apps/web/", "keyword": "audiopipeline", "reason": "오디오 분기 파이프라인 (Concept 6.5)" },
+    { "prefix": "apps/web/", "keyword": "playback", "reason": "통역 음성 재생 큐·스케줄러 (Concept 6.5)" },
+    { "prefix": "apps/web/", "keyword": "caption", "reason": "자막 partial/final 전이 — 실제 컴포넌트명 CaptionOverlay (Design 10.1)" },
+    { "prefix": "apps/web/", "keyword": "subtitle", "reason": "자막 — 토큰·문서에서 쓰는 다른 이름 (Design 11장, --subtitle-*)" },
+    { "prefix": "apps/web/", "keyword": "reconnect", "reason": "재연결 백오프 (Concept 6.2)" },
+    { "prefix": "apps/server/", "keyword": "match", "reason": "매칭 큐 (Concept 6.3)" },
+    { "prefix": "apps/server/", "keyword": "pair", "reason": "Redis 원자적 페어링 Lua (Concept 6.3.4)" }
+  ]
+}
