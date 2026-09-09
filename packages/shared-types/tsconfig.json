@@ -1,0 +1,1 @@
+{ "extends": "@maru/config/tsconfig.base.json" }

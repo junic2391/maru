@@ -225,7 +225,11 @@ importers:
 
   packages/config: {}
 
-  packages/shared-types: {}
+  packages/shared-types:
+    devDependencies:
+      '@maru/config':
+        specifier: workspace:*
+        version: link:../config
 
 packages:
 

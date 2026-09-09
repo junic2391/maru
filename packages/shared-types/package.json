@@ -3,7 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "types": "./src/signaling.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
   "exports": {
     ".": "./src/signaling.ts"
+  },
+  "devDependencies": {
+    "@maru/config": "workspace:*"
   }
 }

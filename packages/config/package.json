@@ -1,5 +1,8 @@
 {
   "name": "@maru/config",
   "version": "0.0.0",
+  "scripts": {
+    "lint": "eslint ."
+  },
   "private": true
 }
