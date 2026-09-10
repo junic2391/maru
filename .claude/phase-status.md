@@ -1,13 +1,25 @@
 # 현재 상태 (수동 갱신)
 
-- Phase: 0 (설계·스파이크, D1–3)
-- 완료: M0-01 ~ **M0-09**. ADR-001~004가 `maru-journal/docs/adr/`에 있다 (001·002·003 채택됨, 004는 **제안됨** — M1-04에서 확정)
-- 다음: **M0-10 (인프라 견적)** — `Build-Phase0.md` M0-10 절을 따라 후보 3곳 요금 조사 → `docs/specs/m0-10-infra-estimate.md` → `Plan.md` 9-2 표
-- 이번 Phase DoD: ADR 4건 ✅ / CI 5분 이내 통과 ✅ / 실기기 WebView `getUserMedia` 성공 ✅
-- 컷라인: Plan.md 5-3 — Should가 밀리면 Could부터 자른다
+- Phase: **0 완료 (2026-09-10)** → 다음은 Phase 1 (통화 코어 + 첫 배포, D4–11)
+- 완료: M0-01 ~ **M0-10 전부**
+- 다음: **M1-01 · WebRTC 학습 스파이크 (수동 시그널링)** — `maru-journal/guide/Build-Phase1.md`
+
+## Phase 0 DoD — 4항목 전부 충족
+
+| 항목 | 결과 |
+|---|---|
+| ADR 4건 | ✅ `maru-journal/docs/adr/` ADR-001~004 (004는 **제안됨** — M1-04에서 확정) |
+| 실기기 WebView `getUserMedia` | ✅ iPhone 12 Pro 3관문 통과 (`docs/specs/m0-08-result.md`) |
+| CI가 lint+test를 5분 내 통과 | ✅ **실측 36초** |
+| 인프라 견적 | ✅ `docs/specs/m0-10-infra-estimate.md` · 월 고정비 설계값 **$33.18** |
 
 **태스크 ID의 정본은 `maru-journal/guide/Backlog.md`다.** 진행 상태도 거기 표를 함께 갱신한다.
 
-주의: 방어 구역 경로(`.claude/defense-zones.json`)는 **ADR-004가 `제안됨` 상태라 여전히 키워드 기반 잠정치**다. M1-04에서 상태 머신 파일 경로를 정할 때 실경로로 갱신하고 ADR-004를 `채택됨`으로 바꾼다.
+## Phase 1에서 처리할 미결 사항
+
+- **ADR-004가 `제안됨`이라 `.claude/defense-zones.json`이 아직 키워드 기반 잠정치다.** M1-04에서 상태 머신 파일 경로를 정할 때 실경로로 갱신하고 ADR-004를 `채택됨`으로 바꾼다.
+- **ADR-021(클라이언트 상태 도구 = Zustand)은 M1-04 산출물이다.** 방향은 정해졌으나 코드가 나온 뒤에 쓴다.
+- **ADR-017(인프라)은 M1-11 산출물이다.** M0-10은 숫자만 모았고, M1-09에서 실제로 띄우고 M1-08에서 전송량을 실측한 뒤 기록한다.
+- 산정 보정치: **새 도구를 처음 연결하는 태스크는 +50%** (Phase 0에서 M0-05가 도구 간 버전 충돌로 초과한 경험)
 
 > 이 파일은 자동 갱신되지 않는다. Phase나 진행 중인 태스크가 바뀌면 직접 고친다.

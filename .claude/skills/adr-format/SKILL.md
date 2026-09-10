@@ -33,8 +33,9 @@ description: ADR 템플릿과 Plan.md 11장 ADR 목록. 기술 결정을 기록�
 | ADR-018 | 링크 초대 경로의 신고·제재 구조와 잔여 위험 | 1 |
 | ADR-019 | 매칭 정책: 완전 무작위 채택과 필터를 두지 않은 이유 | 2 |
 | ADR-020 | 서버 상태 관리(TanStack Query)와 캐시 키 규칙 | 1 |
+| ADR-021 | 클라이언트 상태 도구 선택과 서버 상태와의 경계 | 1 |
 
-`/adr <주제>` 명령이 위 표에서 다음 번호를 찾아 `/Users/junic/Documents/workspace/projects/maru-journal/docs/adr/ADR-XXX-제목.md`를 생성한다. 표에 없는 새 주제라면 **다음 순번(021~)**을 쓰고 Plan 11장에도 함께 추가한다.
+`/adr <주제>` 명령이 위 표에서 다음 번호를 찾아 `/Users/junic/Documents/workspace/projects/maru-journal/docs/adr/ADR-XXX-제목.md`를 생성한다. 표에 없는 새 주제라면 **다음 순번(022~)**을 쓰고 Plan 11장에도 함께 추가한다.
 
 ## ADR 파일 템플릿
 
