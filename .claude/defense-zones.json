@@ -2,7 +2,7 @@
   "_comment": "잠정치 — ADR-004(FSD 폴더 구조 채택 범위) 확정 후 실제 경로로 교체할 것. Concept.md 6.2/6.3/6.5/6.6의 5개 방어 구역.",
   "_matching": "prefix는 경로 앞부분과 그대로 비교하고, keyword는 양쪽에서 영문자·숫자만 남기고 소문자로 바꾼 뒤 포함 여부를 본다. 그래서 CallStateMachine.tsx / call-state-machine.ts / call_state_machine.ts 가 모두 같게 걸린다.",
   "zones": [
-    { "prefix": "apps/web/", "keyword": "statemachine", "reason": "WebRTC 연결 상태 머신 (Build-Phase0-1.md M1-04)" },
+    { "prefix": "apps/web/", "keyword": "statemachine", "reason": "WebRTC 연결 상태 머신 (Build-Phase1.md M1-04)" },
     { "prefix": "apps/web/", "keyword": "audioworklet", "reason": "AudioWorklet PCM 캡처·리샘플링 (Concept 6.5)" },
     { "prefix": "apps/web/", "keyword": "audiopipeline", "reason": "오디오 분기 파이프라인 (Concept 6.5)" },
     { "prefix": "apps/web/", "keyword": "playback", "reason": "통역 음성 재생 큐·스케줄러 (Concept 6.5)" },

@@ -20,7 +20,7 @@ WebSocket 이벤트·REST 응답 타입은 **`@maru/shared-types`가 정본**이
 | 모델 | `room` + `peer` | `session` + `match` |
 | 형태 | `{ type: 'peer-joined', peerId }` 판별 유니온 | `match:paired` 콜론 네임스페이스 |
 | 식별자 | `roomId`, `peerId` | `sessionId`, `peerId` |
-| 근거 | Build-Phase0-1.md M1-02 | Concept.md 7.4 |
+| 근거 | Build-Phase1.md M1-02 | Concept.md 7.4 |
 
 Phase 1에서 `sessionId`·`isInitiator`·매칭 이벤트를 미리 넣지 않는다. 연결이 안 될 때 원인이 시그널링인지 매칭인지 구분이 안 되기 때문이다(Plan 5-1 원칙 4).
 
