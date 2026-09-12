@@ -5,6 +5,7 @@
     "noUnusedLocals": true,
     "target": "ES2022",
     "moduleResolution": "bundler",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "preserveSymlinks": true
   }
 }
