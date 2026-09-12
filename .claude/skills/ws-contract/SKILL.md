@@ -20,7 +20,7 @@ WebSocket 이벤트·REST 응답 타입은 **`@maru/shared-types`가 정본**이
 | 모델 | `room` + `peer` | `session` + `match` |
 | 형태 | `{ type: 'peer-joined', peerId }` 판별 유니온 | `match:paired` 콜론 네임스페이스 |
 | 식별자 | `roomId`, `peerId` | `sessionId`, `peerId` |
-| 근거 | Build-Phase1.md M1-02 | Concept.md 7.4 |
+| 근거 | Build-Phase1.md M1-02 (시그널링 계약 + 게이트웨이 + 방 화면) | Concept.md 7.4 |
 
 Phase 1에서 `sessionId`·`isInitiator`·매칭 이벤트를 미리 넣지 않는다. 연결이 안 될 때 원인이 시그널링인지 매칭인지 구분이 안 되기 때문이다(Plan 5-1 원칙 4).
 
@@ -33,11 +33,21 @@ export type ServerToClient =
   | { type: 'peer-left';   peerId: PeerId }
   | { type: 'offer';  from: PeerId; sdp: string }
   | { type: 'answer'; from: PeerId; sdp: string }
-  | { type: 'ice';    from: PeerId; candidate: RTCIceCandidateInit }
+  | { type: 'ice';    from: PeerId; candidate: IceCandidateInit }
   | { type: 'error';  code: 'ROOM_FULL' | 'NOT_APPROVED' | 'INVALID_TOKEN' };
 ```
 
 **서버는 SDP의 내용을 해석하지 않는다.** 시그널링 서버의 책임은 "A가 보낸 문자열을 같은 방의 B에게 전달"까지다. 불투명한 문자열로 다룬다.
+
+**`RTCIceCandidateInit`을 쓰지 않는다.** 그건 DOM 타입이라 Node 환경에는 없다. `shared-types`는 세 런타임이 공유하므로 **어느 한 런타임에만 있는 타입에 의존하면 안 된다**(ADR-002 패키지 경계). 서버가 어차피 안 들여다보므로 최소 정의로 충분하다.
+
+```typescript
+export type IceCandidateInit = {
+  candidate: string;
+  sdpMid?: string | null;
+  sdpMLineIndex?: number | null;
+};
+```
 
 ### Phase 2 계약 (최종형)
 
