@@ -34,6 +34,8 @@ pnpm --filter @maru/web <script>              # 특정 패키지만
 - `main`에 직접 push하지 않고 브랜치 + PR. 실습성 브랜치는 끝나면 `gh pr close --delete-branch`로 정리.
 - 커밋 메시지는 conventional commits 스타일(`feat:`, `fix:`, `chore:`, `ci:`).
 
+**PR 만들기 직전 순서**: (보안·인증·토큰 관련 변경이면) `/security-check` → `/pr-review` → 지적 사항 반영(거부한 항목은 `/reject`) → `/ai-log` → (실측값이 바뀌었으면) `/kpi`. 순서를 지켜야 `/ai-log`의 "거부한 제안과 이유"에 리뷰 단계의 이력까지 잡힌다.
+
 ## 방어 구역 — 직접 작성, AI는 리뷰어로만
 
 `.claude/defense-zones.json`의 글롭에 걸리는 경로는 `PreToolUse` 훅이 편집을 차단한다. 대상: WebRTC 연결 상태 머신, 매칭 큐·Redis 원자적 페어링, AudioWorklet PCM 처리·재생 스케줄러, 자막 partial/final 전이, 재연결 백오프.
