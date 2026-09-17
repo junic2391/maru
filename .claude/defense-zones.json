@@ -2,7 +2,7 @@
   "_comment": "M1-03에서 상태 머신 항목만 실경로로 확정(ADR-004 채택). 나머지 4개는 해당 태스크 착수 전까지 키워드 기반 잠정치로 남는다.",
   "_matching": "prefix는 경로 앞부분과 그대로 비교하고, keyword는 양쪽에서 영문자·숫자만 남기고 소문자로 바꾼 뒤 포함 여부를 본다. keyword가 빈 문자열이면 prefix 아래 전부가 걸린다. 그래서 CallStateMachine.tsx / call-state-machine.ts / call_state_machine.ts 가 모두 같게 걸린다.",
   "zones": [
-    { "prefix": "apps/web/entities/call/model/", "keyword": "", "reason": "WebRTC 연결 상태 머신 — ADR-004로 확정된 실경로 (Build-Phase1.md M1-03)" },
+    { "prefix": "apps/web/entities/call/model/", "keyword": "", "reason": "WebRTC 연결 상태 머신 — ADR-004로 확정된 실경로 (guide/Phase1/M1-03.md)" },
     { "prefix": "apps/web/", "keyword": "audioworklet", "reason": "AudioWorklet PCM 캡처·리샘플링 (Concept 6.5)" },
     { "prefix": "apps/web/", "keyword": "audiopipeline", "reason": "오디오 분기 파이프라인 (Concept 6.5)" },
     { "prefix": "apps/web/", "keyword": "playback", "reason": "통역 음성 재생 큐·스케줄러 (Concept 6.5)" },
