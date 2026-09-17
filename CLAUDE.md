@@ -17,7 +17,7 @@
 
 **태스크 ID(M0-XX·M1-XX)의 정본은 `maru-journal/guide/Backlog.md`다.** 가이드와 `phase-status.md`는 인용만 한다.
 
-`/Users/junic/Documents/workspace/projects/maru-journal/guide/`의 `Workflow.md`·`Backlog.md`·`Build-Phase0.md`·`Build-Phase1.md`는 **사용자용 문서**다. 사용자가 명시적으로 가리킬 때만 읽는다 — 작업 규칙은 이 파일과 스킬에 있다.
+`/Users/junic/Documents/workspace/projects/maru-journal/guide/`의 `Workflow.md`·`Onboarding.md`·`Backlog.md`·`Build-Phase0.md`(인덱스, 태스크별 상세는 `Phase0/M0-01.md`~`M0-10.md`)·`Build-Phase1.md`(인덱스, 태스크별 상세는 `Phase1/M1-01.md`~`M1-07.md`)·`Glossary.md`는 **사용자용 문서**다. 사용자가 명시적으로 가리킬 때만 읽는다 — 작업 규칙은 이 파일과 스킬에 있다.
 
 `maru-journal`은 이 레포 밖의 **비공개** 저장소다(계획 문서·ADR·거부 기록 등). `docs/adr`·`docs/ai-rejections.md`·`docs/kpi.md`·`docs/specs`는 전부 그 안에 있다 — 이 레포 안에 `docs/`를 새로 만들지 않는다.
 
