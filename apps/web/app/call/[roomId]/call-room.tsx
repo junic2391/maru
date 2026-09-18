@@ -238,6 +238,8 @@ function ActiveCall({
     const join = () => send({ type: "join-room", roomId });
     if (socket.readyState === WebSocket.OPEN) {
       join();
+    } else {
+      socket.onopen = join;
     }
 
     return () => {
