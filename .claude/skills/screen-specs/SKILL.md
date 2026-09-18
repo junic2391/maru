@@ -5,32 +5,34 @@ description: Design.md 3~4장의 화면 인벤토리(S1~S21)와 레이아웃 명
 
 # screen-specs
 
-원본: `/Users/junic/Documents/workspace/projects/maru-journal/source/Design.md` — 3.1 화면 인벤토리(L119~), 3.2 사용자 흐름(L147~), **4장 화면 레이아웃 L189–525**. 화면 하나를 구현하기 전에 해당 섹션을 반드시 읽는다. 여기 표는 목록일 뿐 레이아웃 상세를 담지 않는다.
+원본: `/Users/junic/Documents/workspace/projects/maru-journal/source/Design.md` — 3.1 화면 인벤토리(L139~), 3.2 사용자 흐름(L187~), **4장 화면 레이아웃 L235–697**. 화면 하나를 구현하기 전에 해당 섹션을 반드시 읽는다. 여기 표는 목록일 뿐 레이아웃 상세를 담지 않는다.
 
 ## 레이아웃 명세가 있는 화면 (Design.md 4장)
 
 | 화면 | 이름 | 경로 | 라인 |
 |---|---|---|---|
-| S1 | 랜딩 | `/` | L197 |
-| S2 | 로그인 | `/login` | L228 |
-| S3 | 연령 확인 + EULA | `/welcome` | L248 |
-| S4 | 홈 | `/home` | L271 |
-| S5 | 매칭 대기 | `/match` | L299 |
-| S6 | 통화 | `/call/[sessionId]` | L328 |
-| S7 | 통화 종료 | `/call/[sessionId]/ended` | L355 |
-| S8 | 초대방 대기실 (호스트) | `/room/[code]/host` | L371 |
-| S9·S10 | 게스트 진입 · 승인 대기 | `/join/[code]`, `/join/[code]/waiting` | L400 |
-| S11 | 신고 시트 | 오버레이 | L427 |
-| S14 | 차단·쿨다운 안내 | `/home` 내 상태 | L455 |
-| S15·S16 | 설정 · 계정 삭제 | `/settings`, `/settings/delete` | L473 |
-| S20 | 신고 처리 백오피스 | `/admin/reports` | L499 |
+| S1 | 랜딩 | `/` | L243 |
+| S2 | 로그인 | `/login` | L298 |
+| S3 | 연령 확인 + EULA | `/welcome` | L318 |
+| S4 | 홈 | `/home` | L341 |
+| S5 | 매칭 대기 | `/match` | L369 |
+| S6 | 통화 | `/call/[roomId]`(Phase 1) → `/call/[sessionId]`(Phase 2) | L417 |
+| S7 | 통화 종료 | `/call/[roomId]/ended`(Phase 1) | L444 |
+| S8 | 초대방 대기실 (호스트) | `/room/[code]/host` | L460 |
+| S9·S10 | 게스트 진입 · 승인 대기 | `/join/[code]`, `/join/[code]/waiting` | L489 |
+| S11 | 신고 시트 | 오버레이 | L516 |
+| S12 | 권한 안내 (요청 전 · 거부됨 · 기기 없음 3상태) | 모달/인라인 | L544 |
+| S13 | 링크 오류 (만료·소진·무효화·정원 초과) | `/join/[code]` | L595 |
+| S14 | 차단·쿨다운 안내 | `/home` 내 상태 | L627 |
+| S15·S16 | 설정 · 계정 삭제 | `/settings`, `/settings/delete` | L645 |
+| S20 | 신고 처리 백오피스 | `/admin/reports` | L671 |
+
+**S6·S7의 경로는 Phase마다 다르다** — Phase 1엔 `session` 개념이 없어 `roomId`를 쓰고(M1-02 guide 참고), Phase 2에서 `sessionId`로 바뀐다(`Concept.md` 7.4-b). 구현 시점의 Phase 계약을 `ws-contract` 스킬로 먼저 확인한다.
 
 ## ⚠️ 인벤토리에는 있지만 레이아웃 명세가 없는 화면
 
 | 화면 | 이름 | 우선순위 |
 |---|---|---|
-| **S12** | **권한 안내** (모달/인라인) | **Must — 명세 미작성** |
-| **S13** | **링크 오류** (만료·소진·무효화) | **Must — 명세 미작성** |
 | S17 | 약관·개인정보처리방침·연락처 (`/legal/*`) | Should — 명세 미작성 |
 | S18 | 이용 방법 (`/how-it-works`) | Should — 명세 미작성 |
 | S19 | 지원 언어 (`/languages`) | Should — 명세 미작성 |
