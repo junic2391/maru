@@ -1,4 +1,5 @@
 "use client";
+import { CallState } from "@/entities/call/model";
 import { useCallStore } from "@/entities/call/model/store";
 import { ClientToServer, RoomId, ServerToClient } from "@maru/shared-types";
 import { useRouter } from "next/navigation";
@@ -102,7 +103,7 @@ function ActiveCall({
   const localVideo = useRef<HTMLVideoElement>(null);
   const remoteVideo = useRef<HTMLVideoElement>(null);
   const [status, setStatus] = useState("입장 중...");
-  const { dispatch } = useCallStore();
+  const { state, dispatch } = useCallStore();
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const socketRef = useRef<WebSocket | null>(null);
   const startedAtRef = useRef(0);
@@ -245,30 +246,99 @@ function ActiveCall({
     };
   }, [roomId, stream]);
 
+  function describeConnection(status: CallState["status"]): string {
+    switch (status) {
+      case "connecting":
+        return "연결하고 있어요"; // call.status.connecting
+      case "connected":
+        return "연결됐어요"; // call.status.connected
+      case "reconnecting":
+        return "연결이 불안정해요. 다시 연결 중이에요"; // call.status.reconnecting
+      case "failed":
+        return "연결에 실패했어요"; // call.status.failed
+      case "ended":
+        return "통화가 끝났어요"; // call.status.ended
+      default:
+        return "상대를 기다리는 중…";
+    }
+  }
+
   return (
-    <main style={{ fontFamily: "sans-serif", padding: 16 }}>
+    <main
+      style={{
+        position: "relative",
+        height: "100dvh",
+        background: "#14111F", // --color-bg(다크) — 통화 화면은 다크가 기본(12.4)
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: 1120,
+          aspectRatio: "16 / 9",
+        }}
+      >
+        <video
+          ref={remoteVideo}
+          autoPlay
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: 12,
+          }}
+        />
+        <video
+          ref={localVideo}
+          autoPlay
+          playsInline
+          muted
+          style={{
+            position: "absolute",
+            right: 16,
+            bottom: 16,
+            width: 160,
+            height: 213,
+            objectFit: "cover",
+            borderRadius: 12,
+            boxShadow: "0 4px 16px rgba(28,24,48,0.16)",
+          }}
+        />
+      </div>
+      <div
+        style={{
+          position: "fixed",
+          top: 16,
+          left: 16,
+          color: "#FFFFFF",
+          fontSize: 14,
+        }}
+      >
+        {status} · {describeConnection(state.status)}
+      </div>
       <div style={{ position: "fixed", top: 16, right: 16 }}>
         <button disabled style={{ opacity: 0.4 }} aria-label="신고 (준비 중)">
           ⚑ 신고
         </button>
       </div>
-      <p>{status}</p>
-      <video ref={remoteVideo} autoPlay playsInline width={320}></video>
-      <video ref={localVideo} autoPlay playsInline muted width={160}></video>
-
       <div
         style={{
           position: "fixed",
-          bottom: 32, // --space-8
+          bottom: 32,
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
           gap: 12,
           padding: "12px 24px",
-          borderRadius: 999, // --radius-full
+          borderRadius: 999,
           background: "rgba(28,24,48,0.6)",
           backdropFilter: "blur(12px)",
-          boxShadow: "0 4px 16px rgba(28,24,48,0.16)", // --shadow-float
+          boxShadow: "0 4px 16px rgba(28,24,48,0.16)",
         }}
       >
         <button onClick={toggleMic}>{micOn ? "🎤 마이크" : "🔇 마이크"}</button>
