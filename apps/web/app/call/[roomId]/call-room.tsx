@@ -13,6 +13,23 @@ function assertNever(x: never): never {
 
 type GateState = "idle" | "requesting" | "denied" | "no-device";
 
+// Tailwind Preflight가 버튼 기본 배경·테두리를 지우므로 명시적으로 준다.
+// Design.md §15 --color-primary(라이트)/--color-primary-fg, --radius-full, --space-3/--space-6.
+const primaryButtonStyle = {
+  background: "#C93850",
+  color: "#FFFFFF",
+  border: "none",
+  borderRadius: 999,
+  padding: "12px 24px",
+} as const;
+
+const secondaryButtonStyle = {
+  background: "transparent",
+  color: "#C93850",
+  border: "none",
+  textDecoration: "underline",
+} as const;
+
 // export를 붙이지 않는다 — app/ 아래 "use client" 파일에서 컴포넌트를 export하면
 // Next.js가 함수 타입 prop(onGranted)을 Server Action으로 오인해 경고를 낸다.
 // (node_modules/next/dist/server/typescript/rules/client-boundary.js)
@@ -46,8 +63,10 @@ function PermissionGate({
         style={{ fontFamily: "sans-serif", padding: 16, textAlign: "center" }}
       >
         <p>카메라와 마이크를 허용해야{"\n"}통화할 수 있어요</p>
-        <button>허용하는 방법 보기</button>
-        <button onClick={() => void request()}>다시 시도</button>
+        <button style={secondaryButtonStyle}>허용하는 방법 보기</button>
+        <button style={primaryButtonStyle} onClick={() => void request()}>
+          다시 시도
+        </button>
         <p>
           <a href="/home">← 홈으로</a>
         </p>
@@ -61,7 +80,9 @@ function PermissionGate({
         style={{ fontFamily: "sans-serif", padding: 16, textAlign: "center" }}
       >
         <p>연결된 카메라나 마이크를{"\n"}찾지 못했어요</p>
-        <button onClick={() => void request()}>다시 시도</button>
+        <button style={primaryButtonStyle} onClick={() => void request()}>
+          다시 시도
+        </button>
       </main>
     );
   }
@@ -74,7 +95,11 @@ function PermissionGate({
         카메라와 마이크를 켤게요{"\n"}얼굴을 보고 목소리를 들어야 대화가
         되니까요
       </p>
-      <button onClick={() => void request()} disabled={state === "requesting"}>
+      <button
+        style={primaryButtonStyle}
+        onClick={() => void request()}
+        disabled={state === "requesting"}
+      >
         허용하기
       </button>
       <p>허용해도 녹화하거나 저장하지 않아요</p>
@@ -324,7 +349,11 @@ function ActiveCall({
         {status} · {describeConnection(state.status)}
       </div>
       <div style={{ position: "fixed", top: 16, right: 16 }}>
-        <button disabled style={{ opacity: 0.4 }} aria-label="신고 (준비 중)">
+        <button
+          disabled
+          style={{ color: "#FFFFFF", opacity: 0.4 }}
+          aria-label="신고 (준비 중)"
+        >
           ⚑ 신고
         </button>
       </div>
@@ -343,8 +372,10 @@ function ActiveCall({
           boxShadow: "0 4px 16px rgba(28,24,48,0.16)",
         }}
       >
-        <button onClick={toggleMic}>{micOn ? "🎤 마이크" : "🔇 마이크"}</button>
-        <button onClick={toggleCamera}>
+        <button style={{ color: "#FFFFFF" }} onClick={toggleMic}>
+          {micOn ? "🎤 마이크" : "🔇 마이크"}
+        </button>
+        <button style={{ color: "#FFFFFF" }} onClick={toggleCamera}>
           {cameraOn ? "📷 카메라" : "🚫 카메라"}
         </button>
         <button
