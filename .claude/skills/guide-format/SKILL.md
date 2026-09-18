@@ -1,9 +1,9 @@
 ---
-name: phase-doc-format
+name: guide-format
 description: Build-Phase*.md 문서 양식 — Phase의 목적·범위·트레이드오프·결정근거만 담는다. Phase 문서를 새로 쓰거나 태스크 절을 추가·수정할 때 사용.
 ---
 
-# phase-doc-format
+# guide-format
 
 원본: `/Users/junic/Documents/workspace/projects/maru-journal/guide/Phase0/M0-01.md` ~ `M0-10.md`, `guide/Phase1/M1-01.md` ~ `M1-07.md`가 이 양식으로 재편된 실제 예시다(2026-09-16, `Build-Phase0.md`·`Build-Phase1.md`는 각각 이 태스크 파일들을 가리키는 인덱스로 남는다 — 「문서 최상위 골격」 참고. 태스크 파일은 같은 날, 사람이 훑어보기 쉽도록 `guide/Phase0/`·`guide/Phase1/` 하위 폴더로 다시 옮겨졌다). `Build-Phase2.md`·`Build-Phase3.md`는 아직 태스크 절이 한 파일 안에 있는 구형식이며 이 양식대로 순차 재편 대상이다(아직 안 됨 — 재편 전까지는 절 내부에 구현 코드가 섞여 있을 수 있다).
 
