@@ -110,6 +110,13 @@ function PermissionGate({
 export function CallRoom({ roomId }: { roomId: RoomId }) {
   const [stream, setStream] = useState<MediaStream | null>(null);
 
+  useEffect(() => {
+    if (!stream) return;
+    return () => {
+      stream.getTracks().forEach((t) => t.stop());
+    };
+  }, [stream]);
+
   if (!stream) {
     return <PermissionGate onGranted={setStream} />;
   }
