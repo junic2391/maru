@@ -34,6 +34,7 @@ pnpm --filter @maru/web <script>              # 특정 패키지만
 - `main`에 직접 push하지 않고 브랜치 + PR. 실습성 브랜치는 끝나면 `gh pr close --delete-branch`로 정리.
 - 커밋 메시지는 conventional commits 스타일(`feat:`, `fix:`, `chore:`, `ci:`).
 - 브랜치명은 `<type>/<태스크ID(있으면)>-<영문 kebab 설명>` (예: `feat/m1-04-call-screen`, `chore/pr-review-security-check-tooling`). `type`은 커밋 메시지와 같은 conventional commits 타입. 태스크 ID만 단독으로 쓰지 않는다(예: `M1-04` 금지).
+- **PR 설명(Summary·AI 사용 기록 포함)에는 이 PR의 핵심 기능과 직접 관련된 내용만 담는다.** 같은 세션에서 곁들여 고친 스킬·가이드 문서·설정 등 부수적인 변경은 PR 설명에 언급하지 않는다 — 각 커밋 메시지로 충분하다.
 
 **PR 만들기 직전 순서**: (보안·인증·토큰 관련 변경이면) `/security-check` → `/pr-review` → 지적 사항 반영(거부한 항목은 `/reject`) → `/ai-log` → (실측값이 바뀌었으면) `/kpi`. 순서를 지켜야 `/ai-log`의 "거부한 제안과 이유"에 리뷰 단계의 이력까지 잡힌다.
 
