@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 export interface GuestTokenPayload {
   roomId: RoomId;
-  jtl: string;
+  jti: string;
 }
 
 const SECRET = process.env.GUEST_TOKEN_SECRET ?? 'dev-only-secret';
@@ -13,7 +13,7 @@ const SECRET = process.env.GUEST_TOKEN_SECRET ?? 'dev-only-secret';
 @Injectable()
 export class GuestTokenService {
   sign(roomId: RoomId): string {
-    const payload: GuestTokenPayload = { roomId, jtl: randomUUID() };
+    const payload: GuestTokenPayload = { roomId, jti: randomUUID() };
     return jwt.sign(payload, SECRET, { algorithm: 'HS256', expiresIn: '10m' });
   }
 

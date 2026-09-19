@@ -252,6 +252,10 @@ function ActiveCall({
         case "error":
           setStatus(`오류: ${msg.code}`);
           return;
+        case "guest-waiting":
+        case "rejected":
+          // 대기실 승인 흐름 메시지
+          return;
         default:
           return assertNever(msg);
       }
