@@ -10,4 +10,3 @@ coverage/
 deploy/.env
 deploy/turnserver.conf
 .vercel
-.env*
