@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+.next
+**/.next
+dist
+**/dist
+.turbo
+coverage
+.git
+.env
+.env.local
+*.tsbuildinfo
+.claude/settings.local.json

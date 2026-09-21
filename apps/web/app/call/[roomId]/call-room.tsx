@@ -6,6 +6,15 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:3001/ws";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+// relay 경로 검증용 — M1-06 한정. 경로별(all/relay) 분기는 ADR-013·M2-02가 완성한다.
+const FORCE_RELAY = process.env.NEXT_PUBLIC_FORCE_RELAY === "true";
+
+interface TurnCredentials {
+  urls: string[];
+  username: string;
+  credential: string;
+}
 
 function assertNever(x: never): never {
   throw new Error(`처리하지 않은 이벤트: ${JSON.stringify(x)}`);
@@ -165,122 +174,150 @@ function ActiveCall({
   }
 
   useEffect(() => {
-    const pc = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-    });
-    const socket = new WebSocket(WS_URL);
-    pcRef.current = pc;
-    socketRef.current = socket;
-    startedAtRef.current = Date.now();
+    let cancelled = false;
 
-    const send = (msg: ClientToServer) => socket.send(JSON.stringify(msg));
-
-    pc.ontrack = (e) => {
-      const [first] = e.streams;
-      if (first && remoteVideo.current) {
-        remoteVideo.current.srcObject = first;
-        setStatus("연결됨");
-      }
-    };
-
-    pc.onicecandidate = (e) => {
-      if (!e.candidate || socket.readyState !== WebSocket.OPEN) {
+    async function start() {
+      const res = await fetch(`${API_URL}/turn-credentials`);
+      const turn = (await res.json()) as TurnCredentials;
+      if (cancelled) {
         return;
       }
 
-      send({
-        type: "ice",
-        roomId,
-        candidate: {
-          candidate: e.candidate.candidate,
-          sdpMid: e.candidate.sdpMid,
-          sdpMLineIndex: e.candidate.sdpMLineIndex,
-        },
+      const pc = new RTCPeerConnection({
+        iceServers: [
+          { urls: "stun:stun.l.google.com:19302" },
+          {
+            urls: turn.urls,
+            username: turn.username,
+            credential: turn.credential,
+          },
+        ],
+        // relay 강제는 검증 전용(M1-06) — 프로덕션 경로 분기는 ADR-013·M2-02가 정한다.
+        ...(FORCE_RELAY ? { iceTransportPolicy: "relay" as const } : {}),
       });
-    };
 
-    pc.onconnectionstatechange = () => {
-      switch (pc.connectionState) {
-        case "connected":
-          return;
-        case "disconnected":
-          dispatch({ type: "DISCONNECTED" });
-          return;
-        case "failed":
-          dispatch({ type: "RETRY_FAILED", reason: "ice-failed" });
-          return;
-        default:
-          return;
-      }
-    };
+      const socket = new WebSocket(WS_URL);
+      pcRef.current = pc;
+      socketRef.current = socket;
+      startedAtRef.current = Date.now();
 
-    async function makeOffer() {
-      await pc.setLocalDescription(await pc.createOffer());
-      send({ type: "offer", roomId, sdp: pc.localDescription?.sdp ?? "" });
-    }
+      const send = (msg: ClientToServer) => socket.send(JSON.stringify(msg));
 
-    async function onMessage(raw: string) {
-      const msg = JSON.parse(raw) as ServerToClient;
-      switch (msg.type) {
-        case "room-joined":
-          if (msg.peers.length === 0) {
-            setStatus("상대를 기다리는 중...");
+      pc.ontrack = (e) => {
+        const [first] = e.streams;
+        if (first && remoteVideo.current) {
+          remoteVideo.current.srcObject = first;
+          setStatus("연결됨");
+        }
+      };
+
+      pc.onicecandidate = (e) => {
+        if (!e.candidate || socket.readyState !== WebSocket.OPEN) {
+          return;
+        }
+
+        send({
+          type: "ice",
+          roomId,
+          candidate: {
+            candidate: e.candidate.candidate,
+            sdpMid: e.candidate.sdpMid,
+            sdpMLineIndex: e.candidate.sdpMLineIndex,
+          },
+        });
+      };
+
+      pc.onconnectionstatechange = () => {
+        switch (pc.connectionState) {
+          case "connected":
             return;
-          }
-          setStatus("연결 중...");
-          return makeOffer();
-        case "peer-joined":
-          setStatus("상대가 들어왔습니다.");
-          return;
-        case "offer":
-          await pc.setRemoteDescription({ type: "offer", sdp: msg.sdp });
-          await pc.setLocalDescription(await pc.createAnswer());
-          send({ type: "answer", roomId, sdp: pc.localDescription?.sdp ?? "" });
-          return;
-        case "answer":
-          await pc.setRemoteDescription({ type: "answer", sdp: msg.sdp });
-          return;
-        case "ice":
-          await pc.addIceCandidate(msg.candidate);
-          return;
-        case "peer-left":
-          setStatus("상대가 나갔습니다.");
-          if (remoteVideo.current) {
-            remoteVideo.current.srcObject = null;
-          }
-          return;
-        case "error":
-          setStatus(`오류: ${msg.code}`);
-          return;
-        case "guest-waiting":
-        case "rejected":
-          // 대기실 승인 흐름 메시지
-          return;
-        default:
-          return assertNever(msg);
+          case "disconnected":
+            dispatch({ type: "DISCONNECTED" });
+            return;
+          case "failed":
+            dispatch({ type: "RETRY_FAILED", reason: "ice-failed" });
+            return;
+          default:
+            return;
+        }
+      };
+
+      async function makeOffer() {
+        await pc.setLocalDescription(await pc.createOffer());
+        send({ type: "offer", roomId, sdp: pc.localDescription?.sdp ?? "" });
+      }
+
+      async function onMessage(raw: string) {
+        const msg = JSON.parse(raw) as ServerToClient;
+        switch (msg.type) {
+          case "room-joined":
+            if (msg.peers.length === 0) {
+              setStatus("상대를 기다리는 중...");
+              return;
+            }
+            setStatus("연결 중...");
+            return makeOffer();
+          case "peer-joined":
+            setStatus("상대가 들어왔습니다.");
+            return;
+          case "offer":
+            await pc.setRemoteDescription({ type: "offer", sdp: msg.sdp });
+            await pc.setLocalDescription(await pc.createAnswer());
+            send({
+              type: "answer",
+              roomId,
+              sdp: pc.localDescription?.sdp ?? "",
+            });
+            return;
+          case "answer":
+            await pc.setRemoteDescription({ type: "answer", sdp: msg.sdp });
+            return;
+          case "ice":
+            await pc.addIceCandidate(msg.candidate);
+            return;
+          case "peer-left":
+            setStatus("상대가 나갔습니다.");
+            if (remoteVideo.current) {
+              remoteVideo.current.srcObject = null;
+            }
+            return;
+          case "error":
+            setStatus(`오류: ${msg.code}`);
+            return;
+          case "guest-waiting":
+          case "rejected":
+            return;
+          default:
+            return assertNever(msg);
+        }
+      }
+
+      socket.onmessage = (e: MessageEvent<string>) => {
+        onMessage(e.data);
+      };
+
+      if (localVideo.current) {
+        localVideo.current.srcObject = stream;
+      }
+
+      for (const track of stream.getTracks()) {
+        pc.addTrack(track, stream);
+      }
+
+      const join = () => send({ type: "join-room", roomId });
+      if (socket.readyState === WebSocket.OPEN) {
+        join();
+      } else {
+        socket.onopen = join;
       }
     }
 
-    socket.onmessage = (e: MessageEvent<string>) => {
-      onMessage(e.data);
-    };
-
-    if (localVideo.current) {
-      localVideo.current.srcObject = stream;
-    }
-    for (const track of stream.getTracks()) {
-      pc.addTrack(track, stream);
-    }
-    const join = () => send({ type: "join-room", roomId });
-    if (socket.readyState === WebSocket.OPEN) {
-      join();
-    } else {
-      socket.onopen = join;
-    }
+    start();
 
     return () => {
-      socket.close();
-      pc.close();
+      cancelled = true;
+      socketRef.current?.close();
+      pcRef.current?.close();
     };
   }, [roomId, stream]);
 

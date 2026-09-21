@@ -7,3 +7,6 @@ coverage/
 .env.local
 *.tsbuildinfo
 .claude/settings.local.json
+deploy/.env
+deploy/turnserver.conf
+.vercel
