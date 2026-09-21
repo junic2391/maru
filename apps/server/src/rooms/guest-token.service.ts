@@ -24,7 +24,7 @@ export class GuestTokenService {
       typeof decoded !== 'object' ||
       decoded === null ||
       typeof (decoded as Record<string, unknown>).roomId !== 'string' ||
-      typeof (decoded as Record<string, unknown>).jtl !== 'string'
+      typeof (decoded as Record<string, unknown>).jti !== 'string'
     ) {
       throw new Error('게스트 토큰 페이로드 형식이 아닙니다.');
     }
